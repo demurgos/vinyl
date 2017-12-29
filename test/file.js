@@ -2,6 +2,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var ReadableStream = require('stream').Readable;
 var expect = require('expect');
 var miss = require('mississippi');
 var cloneable = require('cloneable-readable');
@@ -160,8 +161,22 @@ describe('File', function() {
       done();
     });
 
-    it('sets contents', function(done) {
+    it('sets contents (buffer)', function(done) {
       var val = new Buffer('test');
+      var file = new File({ contents: val });
+      expect(file.contents).toEqual(val);
+      done();
+    });
+
+    it('sets contents (readable stream)', function(done) {
+      var val = new ReadableStream();
+      var file = new File({ contents: val });
+      expect(file.contents).toNotBe(undefined);
+      done();
+    });
+
+    it('sets contents (null)', function(done) {
+      var val = null;
       var file = new File({ contents: val });
       expect(file.contents).toEqual(val);
       done();
